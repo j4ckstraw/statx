@@ -27,6 +27,7 @@ var (
 	noAutomount = flag.Bool("A", false, "disable automount")
 	basic       = flag.Bool("b", false, "basic stat(2) compatible stats only")
 	follow      = flag.Bool("L", false, "follow symlinks")
+	noSync      = flag.Bool("N", false, "no sync")
 	// TODO(tk): add flags for further AT_STATX_* flags and STATX_* mask
 )
 
@@ -54,6 +55,10 @@ func main() {
 	}
 	if *follow {
 		flags &^= unix.AT_SYMLINK_NOFOLLOW
+	}
+
+	if *noSync {
+		flags |= unix.AT_STATX_DONT_SYNC
 	}
 
 	for _, arg := range flag.Args() {
